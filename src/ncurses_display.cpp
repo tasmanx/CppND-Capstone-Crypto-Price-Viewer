@@ -10,7 +10,46 @@ using std::vector;
 
 void NCursesDisplay::Display(Controller &controller)
 {
-    // TODO:: implement Display function
+    initscr();     // start ncurses
+    noecho();      // do not print input values
+    cbreak();      // terminate ncurses on ctrl + c
+    start_color(); // enable color
+
+    int x_max{getmaxx(stdscr)};
+    WINDOW *window = newwin(23, x_max - 1, 0, 0);
+
+    // Update Crypto coins every 10 seconds
+    int cycleDuration = 10;
+    auto cycleStartTime = std::chrono::system_clock::now();
+    bool initCryptoCoins = false;
+
+    while (1)
+    {
+        init_pair(2, COLOR_GREEN, COLOR_BLACK);
+        box(window, 0, 0);
+
+        if (!initCryptoCoins)
+        {
+            DisplayCryptoCoins(controller.cryptoCoins(), window);
+            initCryptoCoins = true;
+        }
+
+        auto currentCycleDuration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - cycleStartTime).count();
+        
+        int row{0};
+        mvwprintw(window, ++row, 100, ("Time until update: " + to_string(cycleDuration - currentCycleDuration).substr(0, 1)).c_str());
+        
+        if (currentCycleDuration >= cycleDuration)
+        {
+            DisplayCryptoCoins(controller.cryptoCoins(), window);
+            cycleStartTime = std::chrono::system_clock::now();
+        }
+
+        wrefresh(window);
+        refresh();
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    endwin();
 }
 
 void NCursesDisplay::DisplayCryptoCoins(vector<CryptoCoin> &&cryptoCoins, WINDOW *window)
