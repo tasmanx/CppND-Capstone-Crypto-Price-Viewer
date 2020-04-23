@@ -23,7 +23,7 @@ public:
 
 private:
     // instance to use curl library functions
-    CURL_ptr curl_ptr_;
+    CURL_ptr curlptr_;
     std::string data_;
 
     // for CURL pointer deletion
