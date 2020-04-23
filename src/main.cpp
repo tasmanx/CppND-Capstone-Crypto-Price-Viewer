@@ -1,6 +1,8 @@
-#include <iostream>
+#include "controller.h"
+#include "ncurses_display.h"
 
 int main() 
-{
-    std::cout << "Hello world!" << std::endl;
+{    
+    Controller controller;
+    NCursesDisplay::Display(controller);
 }
