@@ -17,7 +17,6 @@ public:
 
     // getters / setters
     void setUrl(std::string url);
-    void setHeader(std::string header);
     CURLcode getData();
 
 private:

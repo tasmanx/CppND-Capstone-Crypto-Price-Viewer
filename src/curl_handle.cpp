@@ -15,18 +15,10 @@ CurlHandle::CurlHandle() : curl_ptr_(curl_easy_init(), deleter_)
 
 void CurlHandle::setUrl(string url) 
 {
-    // TODO:: implement setUrl
-    assert(false);
-}
-
-void CurlHandle::setHeader(string header)
-{
-    // TODO:: implement setHeader
-    assert(false);
+    curl_easy_setopt(curl_ptr_.get(), CURLOPT_URL, url.c_str());
 }
 
 CURLcode CurlHandle::getData()
 {
-    // TODO:: implement getData
-    assert(false);
+    return curl_easy_perform(curl_ptr_.get());
 }
