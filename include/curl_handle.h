@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <functional>
+#include <string>
 
 #include <curl/curl.h>
 
@@ -17,11 +18,13 @@ public:
 
     // getters / setters
     void setUrl(std::string url);
-    CURLcode getData();
+    CURLcode fetch();
+    std::string getFetchedData();
 
 private:
     // instance to use curl library functions
     CURL_ptr curl_ptr_;
+    std::string data_;
 
     // for CURL pointer deletion
     constexpr static auto deleter_ = [](CURL *c) {

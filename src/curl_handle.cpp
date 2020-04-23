@@ -5,20 +5,38 @@
 
 using std::string;
 
+// callback function to receive incoming data chunks using curl write function
+extern "C" size_t dataHandler(const char *buffer, size_t size, size_t nmemb, string *userData)
+{
+    if (userData == nullptr)
+        return 0;
+    // write data to userData string
+    userData->append(buffer, (size * nmemb));
+    // return number of bytes written
+    return size * nmemb;
+}
+
 // init curl_ptr_ by calling CURL lib function curl_easy_init()
-// custom deleter will take care of curl_ptr_ when it goes out of scope 
+// custom deleter will take care of curl_ptr_ when it goes out of scope
 CurlHandle::CurlHandle() : curl_ptr_(curl_easy_init(), deleter_)
 {
     // init to use curl library
     curl_global_init(CURL_GLOBAL_ALL);
+    // attach curl library writer function
+    curl_easy_setopt(curl_ptr_.get(), CURLOPT_WRITEFUNCTION, dataHandler);
+    curl_easy_setopt(curl_ptr_.get(), CURLOPT_WRITEDATA, &data_);
 }
 
-void CurlHandle::setUrl(string url) 
+void CurlHandle::setUrl(string url)
 {
     curl_easy_setopt(curl_ptr_.get(), CURLOPT_URL, url.c_str());
 }
 
-CURLcode CurlHandle::getData()
+CURLcode CurlHandle::fetch()
 {
     return curl_easy_perform(curl_ptr_.get());
+}
+
+string CurlHandle::getFetchedData() {
+    return data_;
 }
