@@ -27,7 +27,7 @@ CurlHandle::CurlHandle() : curlptr_(curl_easy_init(), deleter_)
     curl_easy_setopt(curlptr_.get(), CURLOPT_WRITEDATA, &data_);
 }
 
-void CurlHandle::setUrl(string url)
+void CurlHandle::url(string url)
 {
     curl_easy_setopt(curlptr_.get(), CURLOPT_URL, url.c_str());
 }
@@ -37,6 +37,12 @@ CURLcode CurlHandle::fetch()
     return curl_easy_perform(curlptr_.get());
 }
 
-string CurlHandle::getFetchedData() {
+string CurlHandle::fetchedData()
+{
     return data_;
+}
+
+void CurlHandle::clearFetchedData()
+{
+    data_.clear();
 }

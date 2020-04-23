@@ -17,9 +17,10 @@ public:
     CurlHandle();
 
     // getters / setters
-    void setUrl(std::string url);
+    void url(std::string url);
     CURLcode fetch();
-    std::string getFetchedData();
+    std::string fetchedData();
+    void clearFetchedData();
 
 private:
     // instance to use curl library functions
@@ -34,16 +35,4 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
 
