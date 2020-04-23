@@ -8,7 +8,7 @@
 namespace NCursesDisplay
 {
 void Display(Controller &controller);
-void DisplayCryptoCoins(std::vector<CryptoCoin> &cryptoCoins, WINDOW *window);
+void DisplayCryptoCoins(std::vector<CryptoCoin> &&cryptoCoins, WINDOW *window);
 }; // namespace NCursesDisplay
 
 #endif
