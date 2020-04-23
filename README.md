@@ -1,1 +1,1 @@
-# CppND-Capstone-Stock-Price-Viewer
+# CppND-Capstone-Crypto-Price-Viewer
