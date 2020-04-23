@@ -1,9 +1,11 @@
 #include "controller.h"
 
 #include <vector>
+#include <string>
 #include "nlohmann/json.hpp"
 
 using std::vector;
+using std::string;
 using json = nlohmann::json;
 
 Controller::Controller()
@@ -11,7 +13,21 @@ Controller::Controller()
     curlHandle_.url(CryptoCoin::API_URL);
 }
 
-vector<CryptoCoin> Controller::cryptoCoins() 
+vector<CryptoCoin> Controller::cryptoCoins()
 {
-    // TODO:: implement cryptoCoins
+    curlHandle_.clearFetchedData();
+    curlHandle_.fetch();
+    json cryptoData = json::parse(curlHandle_.fetchedData());
+    json coinsArray = std::move(cryptoData["data"]["coins"]);
+
+    cryptoCoins_.clear();
+    for (json::iterator it = coinsArray.begin(); it != coinsArray.end(); ++it)
+        cryptoCoins_.emplace_back(
+            it.value()["rank"].get<int>(),
+            it.value()["symbol"].get<string>(),
+            it.value()["name"].get<string>(),
+            std::stoi(it.value()["price"].get<string>()),
+            it.value()["change"].get<float>());
+    
+    return cryptoCoins_;
 }
