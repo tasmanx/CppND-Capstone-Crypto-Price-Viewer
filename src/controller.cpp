@@ -26,7 +26,7 @@ vector<CryptoCoin> Controller::cryptoCoins()
             it.value()["rank"].get<int>(),
             it.value()["symbol"].get<string>(),
             it.value()["name"].get<string>(),
-            std::stoi(it.value()["price"].get<string>()),
+            it.value()["price"].get<string>().substr(0, it.value()["price"].get<string>().find_first_of(".") + 3),
             it.value()["change"].get<float>());
     
     return cryptoCoins_;
